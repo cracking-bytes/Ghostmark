@@ -1,5 +1,8 @@
 import os
 
+
+# image input
+
 def get_img_inp():
     while True:
         try:
@@ -25,3 +28,33 @@ images = get_img_inp()
 print("images: ", images)
 
 
+# feature select
+
+def feature_select():
+    while True:
+        try:
+            print('''\nPlease select what you want to do with the image/images:
+1. Extract metadata
+2. Detect Steganography
+3. Extract Text (OCR)
+4. Generate Image Hash
+5. Wipe metadata
+6. Detect Password Protection
+7. All''')
+            
+            f_inp = input("Enter the numbers of the features you want to select (comma-seperated): ").strip()
+            
+            f_list = [int(i.strip()) for i in f_inp.split(',')]
+
+            
+            if all(1 <= i <= 7 for i in f_list):
+                return f_list
+                break
+            else:
+                print("❌ Please enter valid numbers between 1 and 7.\n")
+            
+        except ValueError:
+            print("❌ Invalid input. Please enter numbers only, separated by commas.\n")
+
+
+feature_select()
