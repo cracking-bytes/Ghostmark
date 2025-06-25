@@ -1,18 +1,20 @@
-
 # Ghostmark
 
-**Ghostmark** is a command-line image forensics toolkit that helps you analyze and clean images by removing visible watermarks, detecting hidden steganographic data, and scanning metadata for anomalies. It supports batch processing, generates detailed reports, and offers both CLI and optional GUI usage.
+**Ghostmark** is a command-line image forensics toolkit designed to help you analyze, verify, and sanitize digital images. It provides tools for extracting metadata, detecting steganography, extracting text, hashing images, scrubbing metadata, and detecting password protection. Ghostmark supports batch processing, generates detailed reports.
 
 ---
 
 ## Features
 
-- Watermark / Text Remover using OpenCV inpainting
+- Metadata Extraction
 - Steganography (LSB) Detector
-- Metadata / EXIF Analyzer
-- Batch Mode for processing folders
+- Text Extraction
+- Image Hashing
+- Metadata Scrubber
+- Password Protection Detection
+- Batch Mode
 - HTML / TXT Report Generator
-- CLI and Optional GUI (Tkinter)
+- CLI based
 
 ---
 

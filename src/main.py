@@ -57,4 +57,13 @@ def feature_select():
             print("❌ Invalid input. Please enter numbers only, separated by commas.\n")
 
 
-feature_select()
+features = feature_select()
+
+#metadata
+
+if (i == 1 for i in features):
+    from src.metadata_parser import extract_metadata
+
+    for img_path in images:
+        meta = extract_metadata(img_path)
+        print(meta)

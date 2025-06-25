@@ -1,0 +1,28 @@
+Metadata:
+
+Images like JPEG, PNG, TIFF store EXIF (Exchangable Image File Format) Metadata.
+- Camera make/model
+- Date/time the photo was taken
+- GPS location (if enabled)
+- Image resolution, orientation
+- 
+
+
+Python File handling:
+
+file = open("filename.txt", "mode")
+
+'r' - Read
+'w' - Write (creates/overwrites)
+'a' - append to end
+'rb' - read in binary
+'wb' - write in binary
+
+content = file.read()
+lines = file.readlines()
+file.write("hhllo")
+file.close()
+
+with open("filename.txt", 'r')
+    content = file.read()
+    print(content)
