@@ -1,114 +1,102 @@
-from PIL import Image
 import numpy as np
-import time
 import os
+from PIL import Image
 
-def extract_lsb(image_path):
-    print(f"\n[🔍] Analyzing LSB in: {os.path.basename(image_path)}")
-    img = Image.open(image_path)
-    img = img.convert("RGB")
-    data = np.array(img)
-    lsb_data = data & 1
-    flat_lsb = lsb_data.flatten()
+def lsb(path):
+    print(f"\nAnalyzing image: {os.path.basename(path)}")
 
-    zeros = np.count_nonzero(flat_lsb == 0)
-    ones = np.count_nonzero(flat_lsb == 1)
-    total = zeros + ones
-    zero_percent = (zeros / total) * 100
-    one_percent = (ones / total) * 100
+    img = Image.open(path).convert("RGB")
+    extract = np.array(img)
 
-    print(f"[🧮] Extracted {total:,} LSB bits")
-    print(f"[🔢] Distribution -> 0s: {zeros:,} ({zero_percent:.2f}%) | 1s: {ones:,} ({one_percent:.2f}%)")
+    lsb_info = extract & 1
+    flat_bit = lsb_info.flatten()
 
-    # LSB analysis conclusion
-    threshold = 5  # Percentage difference threshold
-    diff = abs(zero_percent - one_percent)
-    
-    if diff < threshold:
-        print("[✅] LSB Distribution: Balanced (normal for clean images)")
+    zero = np.count_nonzero(flat_bit == 0)
+    one = np.count_nonzero(flat_bit == 1)
+    sum = zero + one
+
+    percentofzero = (zero / sum) * 100
+    percentofone = (one / sum) * 100
+    diff = abs(percentofzero - percentofone)
+    max = 5.0
+
+    print(f"Total LSB's: {sum}")
+    print(f"0s: {zero} ({percentofzero:.2f}%), 1s: {one} ({percentofone:.2f}%)")
+
+    if diff < max:
+        print("LSB looks normal (sensible)")
     else:
-        print(f"[⚠️] LSB Distribution: Imbalanced (difference: {diff:.2f}%)")
-        if zero_percent > one_percent:
-            print("     - Excess of 0s may indicate hidden data or compression artifacts")
+        print(f"Odd LSB's detected (difference: {diff:.2f}%)")
+        if percentofzero > percentofone:
+            print("0s > 1s — might be compression/hidden data")
         else:
-            print("     - Excess of 1s is unusual and strongly suggests data embedding")
+            print("1s < 0s — unbalanced, possible steganography")
 
-def chi_square_test(image_path):
-    print(f"\n[📊] Running Statistical Analysis (Chi-Square Test)")
-    img = Image.open(image_path)
-    img = img.convert("L")  # Convert to grayscale
+def chi2test(path):
+    print("\nRunning chi-square test....")
+
+    img = Image.open(path).convert("L")
     pixels = np.array(img).flatten()
 
-    chi_squared = 0
+    chi2 = 0.0
     valid_pairs = 0
-    
+
     for i in range(0, 256, 2):
-        count_even = np.count_nonzero(pixels == i)
-        count_odd = np.count_nonzero(pixels == i + 1)
-        total = count_even + count_odd
-        
-        if total > 0:
+        tol_even = np.count_nonzero(pixels == i)
+        odd = np.count_nonzero(pixels == i + 1)
+        pair_total = tol_even + odd
+
+        if pair_total > 0:
+            expected = pair_total / 2
+            chi2 += ((tol_even - expected) ** 2 + (odd - expected) ** 2) / expected
             valid_pairs += 1
-            expected = total / 2
-            chi_squared += ((count_even - expected) ** 2 + (count_odd - expected) ** 2) / expected
 
-    # Normalize by number of valid pairs
     if valid_pairs > 0:
-        chi_squared /= valid_pairs
-    
-    print(f"[⚖️] Chi-Square Score: {chi_squared:,.2f}")
-    
-    # Confidence interpretation
-    if chi_squared < 50:
-        confidence = "VERY HIGH"
-        conclusion = "Almost certainly contains hidden data"
-    elif chi_squared < 200:
-        confidence = "HIGH"
-        conclusion = "Likely contains hidden data"
-    elif chi_squared < 500:
-        confidence = "MODERATE"
-        conclusion = "Suspicious, may contain hidden data"
-    elif chi_squared < 1000:
-        confidence = "LOW"
-        conclusion = "Possibly clean, but warrants further inspection"
-    else:
-        confidence = "VERY LOW"
-        conclusion = "Appears clean (normal image noise)"
-    
-    print(f"[📈] Confidence: {confidence}")
-    print(f"[🔎] Conclusion: {conclusion}")
+        chi2 /= valid_pairs
 
-def get_image_path():
+    print(f"Chi-square Score: {chi2:.2f}")
+
+    if chi2 < 50:
+        print("Confidence: Very High — might be hidden data")
+    elif chi2 < 200:
+        print("Confidence: High — possibly hidden data")
+    elif chi2 < 500:
+        print("Confidence: Medium — suspicious")
+    elif chi2 < 1000:
+        print("Confidence: Low — may be clean")
+    else:
+        print("Confidence: Very Low — image looks clean")
+
+def img_path():
     while True:
-        image_path = input("\nEnter the path of the image to analyze: ").strip()
-        if os.path.exists(image_path):
-            return image_path
-        print(f"❌ File not found: {image_path}. Please try again.")
+        path = input("Enter path of the img: ").strip()
+        if os.path.exists(path):
+            return path
+        else:
+            print("404 - image not found.")
 
 def main():
-    print("═══════════════════════════════════════════════")
-    print("👻 Ghostmark - Advanced Steganography Detector")
-    print("═══════════════════════════════════════════════")
-    
-    # Get image path from user
-    image_path = get_image_path()
-    
-    print("\n>>> Starting forensic analysis...\n")
+    print("=" * 50)
+    print("Ghostmark - Steganography Detection Tool")
+    print("=" * 50)
+
+    check = img_path()
+    print("\nStarting Test...\n")
 
     try:
-        extract_lsb(image_path)
-        chi_square_test(image_path)
-        
-        print("\n[📋] Final Assessment:")
-        print("1. LSB analysis checks bit distribution anomalies")
-        print("2. Chi-Square test detects statistical deviations")
-        print("3. Combine both results for accurate detection")
-        
-    except Exception as e:
-        print(f"[❌] Error analyzing image: {str(e)}")
+        lsb(check)
+        chi2test(check)
 
-    print("\n>>> Analysis complete.")
-    print("═══════════════════════════════════════════════")
+        print("\nConclusion:")
+        print("✔ LSB's: Detects bit-level annomalys")
+        print("✔ Chi-square test: Flags statistical anomalies")
+        print("✔ Uses results together to decide data hiding")
+
+    except Exception as e:
+        print(f"error: {e}")
+
+    print("\nAnalysis complete.")
+    print("=" * 50)
 
 if __name__ == "__main__":
     main()
