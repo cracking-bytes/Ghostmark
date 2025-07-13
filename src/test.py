@@ -35,7 +35,9 @@
 
 
 
-dict = {1:"cracking", 2:"bytes"}
+# dict = {1:"cracking", 2:"bytes"}
 
-for i, j in dict.items():
-    print(i,j)
+# for i, j in dict.items():
+#     print(i,j)
+
+
