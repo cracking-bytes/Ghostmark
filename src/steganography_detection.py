@@ -8,29 +8,42 @@ def lsb(path):
     img = Image.open(path).convert("RGB")
     extract = np.array(img)
 
-    lsb_info = extract & 1
-    flat_bit = lsb_info.flatten()
+    channels = ['Red', 'Green', 'Blue']
+    total_zero = total_one = 0
 
-    zero = np.count_nonzero(flat_bit == 0)
-    one = np.count_nonzero(flat_bit == 1)
-    sum = zero + one
+    for i, color in enumerate(channels):
+        lsb_info = extract[:, :, i] & 1
+        flat_bit = lsb_info.flatten()
 
-    percentofzero = (zero / sum) * 100
-    percentofone = (one / sum) * 100
-    diff = abs(percentofzero - percentofone)
-    max = 5.0
+        zero = np.count_nonzero(flat_bit == 0)
+        one = np.count_nonzero(flat_bit == 1)
+        total = zero + one
 
-    print(f"Total LSB's: {sum}")
-    print(f"0s: {zero} ({percentofzero:.2f}%), 1s: {one} ({percentofone:.2f}%)")
+        total_zero += zero
+        total_one += one
 
-    if diff < max:
-        print("LSB looks normal (sensible)")
-    else:
-        print(f"Odd LSB's detected (difference: {diff:.2f}%)")
-        if percentofzero > percentofone:
-            print("0s > 1s — might be compression/hidden data")
-        else:
-            print("1s < 0s — unbalanced, possible steganography")
+        percent_zero = (zero / total) * 100
+        percent_one = (one / total) * 100
+        diff = abs(percent_zero - percent_one)
+
+        print(f"\n--- {color} Channel ---")
+        print(f"Total LSBs: {total}")
+        print(f"0s: {zero} ({percent_zero:.2f}%), 1s: {one} ({percent_one:.2f}%)")
+        print(f"Difference: {diff:.2f}%")
+
+    grand_total = total_zero + total_one
+    avg_zero = (total_zero / grand_total) * 100
+    avg_one = (total_one / grand_total) * 100
+    avg_diff = abs(avg_zero - avg_one)
+
+    print("\n--- Average Across All Channels ---")
+    print(f"Total LSBs: {grand_total}")
+    print(f"0s: {total_zero} ({avg_zero:.2f}%), 1s: {total_one} ({avg_one:.2f}%)")
+    print(f"Difference: {avg_diff:.2f}%")
+
+    print("\n⚠️ This is a statistical overview.")
+    print("   Review the difference yourself to decide.")
+    print("   If the difference is small (~<5%), data might be hidden.")
 
 def chi2test(path):
     print("\nRunning chi-square test....")
