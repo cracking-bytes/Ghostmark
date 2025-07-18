@@ -1,3 +1,6 @@
+source .venv/bin/activate
+
+
 Metadata:
 
 Images like JPEG, PNG, TIFF store EXIF (Exchangable Image File Format) Metadata.
@@ -26,3 +29,85 @@ file.close()
 with open("filename.txt", 'r')
     content = file.read()
     print(content)
+
+
+
+Image Hashing:
+
+Hash - A string that represents the whole image
+- between 2 images
+- it is calculated from the content of the img (pixels or file bytes)
+- it is basically result of an algo that looks at the file
+
+Types:
+
+1. Cryptographic hash:
+- raw binary content of the file - 1s and 0s
+- all the pixels should match, not even a single pixel should be different
+how it works:
+- it reads the file as bytes
+- it feeds that data into a Cryptographic function like SHA256
+- the algo goes through every byte and does heavy math and then produces as fixed length string (commonly 64 hex digits)
+used to:
+- catch duplicates
+- detect if an image has been edited, even a little
+
+ex. SHA256, MD5
+
+- SHA256:
+    - strong
+    - 64 hex characters
+    - slower
+    - used for file integrity and temper detection
+
+- MD5:
+    - weak
+    - 32 hex characters
+    - faster but outdated
+    - used for file lookup and duplicate scan
+
+2. Perceptual Hash:
+- it is about wha the img looks like not its bytes
+- sees similarity, even if 1 is a bit darker, resized or blurred
+
+ex. aHash, pHash, dHash
+
+Use:
+- to check if the img is a clone of another
+- edited img?
+- similar but not exact?
+
+- aHash: avg hash
+    - it checks by taking out avg of brightness
+    - to check similarity of imgs
+    steps:
+    - resize to 8x8: to make it 64 pixels
+    - convert to grayscale
+    - Calculation of avg brightness of all the pixels
+    - compare every pixel: if brighter than avg - 1 else - 0
+    - make 64 bits hash
+
+- dHash: difference hash
+    - it checks how the patterns inside the img are changing
+    - when the img has been zoomed, cropped or edited and you still want to check
+    steps:
+        - resize to 9x8: 1 col extra to compare all pixels side by side
+        - convert to grayscale
+        - compare left and right pixels: if left is brighter - 1 else - 0
+        - make 64 bits hash
+
+- pHash: Perceptual hash
+    - the most complex hash
+    - it checks structure and frequency of the img
+    - to check if img has been edited, compressed or the img format is changed
+    steps:
+        - resize to 32x32: to make it capture more details
+        - convert to grayscale
+        - apply DCT (Discrete cosine transform): breaks img patterns on the basis of frequency, high and low
+        - keeps 8x8 blocks on top left: low freq parts = overall look and feel
+        - compare values: pixel brighter than avg - 1 else - 0
+
+
+
+
+
