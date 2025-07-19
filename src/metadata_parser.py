@@ -2,43 +2,51 @@ from PIL import Image
 import piexif
 import pprint as prnt
 
-# checking for exif existence
 
-img = Image.open('example_images/img.jpg')
+def main(img_path):
+    print('''\n\n\n--- Metadata Extraction ---\n''')
 
-exif_chk = img.info.keys()
-if "exif" not in img.info:
-    print("No metadata found")
-    exit()
 
-exif_d = piexif.load('example_images/img.jpg')
+    # img_path = input("Enter the image path: ")
 
-#prnt.pprint(exif_dict)
+    # checking for exif existence
 
-#sections
+    img = Image.open(img_path)
 
-sects = ['0th', 'Exif', 'GPS', 'Interop', '1st']
+    exif_chk = img.info.keys()
+    if "exif" not in img.info:
+        print("No metadata found")
+        exit()
 
-for sect in sects:
-    print(f"\n--- {sect} Metadata ---")
+    exif_d = piexif.load(img_path)
 
-    if not exif_d[sect]:
-        print("No data.")
-        continue
+    #prnt.pprint(exif_dict)
 
-    for t_id, value in exif_d[sect].items():
-        t_info = piexif.TAGS[sect].get(t_id, {})
-        t_name = t_info.get("name", f"Unknown({t_id})")
+    #sections
 
-        
+    sects = ['0th', 'Exif', 'GPS', 'Interop', '1st']
 
-        # print(tag_info)
-        # print(tag_name)
+    for sect in sects:
+        print(f"\n--- {sect} Metadata ---")
 
-        if isinstance(value, bytes):
-            try:
-                value = value.decode("utf-8", errors="ignore")
-            except:
-                pass
+        if not exif_d[sect]:
+            print("No data.")
+            continue
 
-        print(f"{t_name:30}: {value}")
+        for t_id, value in exif_d[sect].items():
+            t_info = piexif.TAGS[sect].get(t_id, {})
+            t_name = t_info.get("name", f"Unknown({t_id})")
+
+            
+
+            # print(tag_info)
+            # print(tag_name)
+
+            if isinstance(value, bytes):
+                try:
+                    value = value.decode("utf-8", errors="ignore")
+                except:
+                    pass
+
+            print(f"{t_name:30}: {value}")
+

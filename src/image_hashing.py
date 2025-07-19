@@ -3,28 +3,19 @@ import hashlib as hl
 import imagehash as ih
 
 
-def main(img):
-    with open(img, 'rb') as img1a:
+def hashing(img_path):
+
+    with open(img_path, 'rb') as img1a:
         data = img1a.read()
         # print(data)
 
     sha256_hash = hl.sha256(data).hexdigest()
     md5_hash = hl.md5(data).hexdigest()
 
-    print("\n --- Cryptographic hashes ---")
-    print(f"SHA256 : {sha256_hash}")
-    print(f"MD5    : {md5_hash}")
-
-    print("\n --- Perceptual Hashes ---")
-
-    img1b = Image.open(img)
+    img1b = Image.open(img_path)
     ahash = ih.average_hash(img1b)
     dhash = ih.dhash(img1b)
     phash = ih.phash(img1b)
-
-    print("aHash :", ahash)
-    print("dHash :", dhash)
-    print("pHash :", phash)
 
     return {
         "sha256": sha256_hash,
@@ -34,9 +25,8 @@ def main(img):
         "phash": phash
     }
 
+
 def compare(h1, h2):
-    print("\n --- Comparision Result ---")
-    print()
 
     #sha256
     if h1['sha256'] == h2['sha256']:
@@ -68,17 +58,28 @@ def compare(h1, h2):
     else:
         print("pHash: Images look different.")
 
-    
 
-img1 = 'example_images/img.jpg'
-print("Image 1:")
-h1 = main(img1)
 
-print()
+# img1 = main
+# print("Image 1:")
+# h1 = main(img1)
 
-img2 = 'example_images/clean.jpg'
-print("Image 2:")
-h2 = main(img2)
+# print()
 
-compare(h1,h2)
+# img2 = 'example_images/clean.jpg'
+# print("Image 2:")
+# h2 = main(img2)
 
+# compare(h1,h2)
+
+# img = 'example_images/img.jpg'
+# clean='example_images/clean.jpg'
+
+# img1 = hashing(img)
+
+# for key, value in img1.items():
+#     print(f"{key}: {value}")
+
+# img2 = hashing(clean)
+
+# compare(img1, img2)

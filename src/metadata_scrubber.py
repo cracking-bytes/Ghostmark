@@ -1,27 +1,33 @@
 from PIL import Image
 import piexif
 
-#checking for EXIF
+def main(img_path):
 
-img = Image.open('example_images/img.jpg')
+    print("\n\n\n--- Metadata Scrubbing ---\n")
 
-exif_chk = img.info.keys()
-if "exif" not in img.info:
-    print("No metadata found to scrub")
-    exit()
+    # img_path = input("Enter the image path: ")
 
-exif_d = piexif.load('example_images/img.jpg')
+    #checking for EXIF
 
-sects = ['0th', 'Exif', 'GPS', 'Interop', '1st']
+    img = Image.open(img_path)
 
-for sect in sects:
-    print(f"\nScrubbing {sect} Metadata...")
-    exif_d[sect] = {}
+    exif_chk = img.info.keys()
+    if "exif" not in img.info:
+        print("No metadata found to scrub")
+        exit()
 
-imgsave = input(f"\nEnter the path with name of the image when saved (example: example_images/clean.jpg or leave empty): ")
+    exif_d = piexif.load(img_path)
 
-if imgsave == "":
-    imgsave = "img_clean.jpg"
+    sects = ['0th', 'Exif', 'GPS', 'Interop', '1st']
 
-exif_bi = piexif.dump(exif_d)
-img.save(imgsave, "jpeg", exif = exif_bi)
+    for sect in sects:
+        print(f"\nScrubbing {sect} Metadata...")
+        exif_d[sect] = {}
+
+    imgsave = input(f"\nEnter the path with name of the image when saved (example: example_images/clean.jpg or leave empty): ")
+
+    if imgsave == "":
+        imgsave = "img_clean.jpg"
+
+    exif_bi = piexif.dump(exif_d)
+    img.save(imgsave, "jpeg", exif = exif_bi)
