@@ -41,7 +41,7 @@ def lsb(path):
     print(f"0s: {total_zero} ({avg_zero:.2f}%), 1s: {total_one} ({avg_one:.2f}%)")
     print(f"Difference: {avg_diff:.2f}%")
 
-    print("\n⚠️ This is a statistical overview.")
+    print("\nThis is a statistical overview.")
     print("   Review the difference yourself to decide.")
     print("   If the difference is small (~<5%), data might be hidden.")
 
@@ -80,20 +80,20 @@ def chi2test(path):
     else:
         print("Confidence: Very Low — image looks clean")
 
-def img_path():
+def img_path(path):
     while True:
-        path = input("Enter path of the img: ").strip()
+        # path = input("Enter path of the img: ").strip()
         if os.path.exists(path):
             return path
         else:
             print("404 - image not found.")
 
-def main():
-    print("=" * 50)
-    print("Ghostmark - Steganography Detection Tool")
-    print("=" * 50)
+def main(path):
+    # print("=" * 50)
+    # print("Ghostmark - Steganography Detection Tool")
+    # print("=" * 50)
 
-    check = img_path()
+    check = img_path(path)
     print("\nStarting Test...\n")
 
     try:
@@ -108,8 +108,8 @@ def main():
     except Exception as e:
         print(f"error: {e}")
 
-    print("\nAnalysis complete.")
-    print("=" * 50)
+    print("\n\nAnalysis complete.")
+    # print("=" * 50)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

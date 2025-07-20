@@ -4,7 +4,6 @@ import pprint as prnt
 
 
 def main(img_path):
-    print('''\n\n\n--- Metadata Extraction ---\n''')
 
 
     # img_path = input("Enter the image path: ")

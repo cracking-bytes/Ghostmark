@@ -3,7 +3,6 @@ import piexif
 
 def main(img_path):
 
-    print("\n\n\n--- Metadata Scrubbing ---\n")
 
     # img_path = input("Enter the image path: ")
 

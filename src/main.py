@@ -1,9 +1,9 @@
 import os
 import metadata_parser as mp
 import metadata_scrubber as ms
-# import msg_embed as me
-# import text_extraction as te
-# import steganography_detection as sd
+import msg_embed as me
+import text_extraction as te
+import steganography_detection as sd
 import image_hashing as ih
 # import password_protection_detection as ppd
 
@@ -44,7 +44,7 @@ def feature_select():
 1. Extract metadata
 2. Wipe metadata
 3. Embed text in image
-4. Extract Text (OCR)
+4. Extract Hidden Text
 5. Steganography Detection
 6. Generate Image Hash
 7. Image comparision
@@ -69,29 +69,43 @@ def feature_select():
 
 def work(i, img_path):
     if i == 1:
+        print('''\n\n\n--- Metadata Extraction ---\n''')
         if pathc == "n":
-            img_path = input("Enter the image path: ")
+            img_path = input("Enter the image path: ").strip()
         mp.main(img_path)
+
     if i == 2:
+        print("\n\n\n--- Metadata Scrubbing ---\n")
         if pathc == "n":
-            img_path = input("Enter the image path: ")
+            img_path = input("Enter the image path: ").strip()
         ms.main(img_path)
+
     if i == 3:
+        print("\n\n\n--- Embedding Text In An Image ---\n")
         if pathc == "n":
-            img_path = input("Enter the image path: ")
+            img_path = input("Enter the image path: ").strip()
+        me.main(img_path)
+
     if i == 4:
+        print("\n\n\n--- Hidden Text Extraction ---\n")
         if pathc == "n":
-            img_path = input("Enter the image path: ")
+            img_path = input("Enter the image path: ").strip()
+        te.main(img_path)
+
     if i == 5:
+        print("\n\n\n--- Steganography Detection ---")
         if pathc == "n":
-            img_path = input("Enter the image path: ")
+            img_path = input("Enter the image path: ").strip()
+        sd.main(img_path)
+        
     if i == 6:
+        print("\n\n\n--- Generated Image Hashes ---\n")
         if pathc == "n":
             img_path = input("Enter the image path: ")
         hashing = ih.hashing(img_path)
-        print("\n\n\n--- Generated Image Hashes ---\n")
         for key, value in hashing.items():
             print(f"{key}: {value}")
+
     if i == 7:
         print("\n\n\n--- Image Comparision ---\n")
         if pathc == "n":
@@ -102,6 +116,7 @@ def work(i, img_path):
         i1 = ih.hashing(img_path)
         i2 = ih.hashing(img_path2)
         ih.compare(i1, i2)
+
     if i == 8:
         if pathc == "n":
             img_path = input("Enter the image path: ")
@@ -114,8 +129,12 @@ if len(features) > 1:
     while True:
         try:
             pathc = input("Do you want to use same img path for all selected features (y/n): ")
+            
             if pathc == "y":
-                img_path = input("Enter the image path: ")
+                img_path = input("Enter the image path: ").strip()
+                break
+            elif pathc == "n":
+                img_path = ''
                 break
             else:
                 print("Please choose from yes (y) or no (n).\n")
@@ -123,6 +142,7 @@ if len(features) > 1:
         except ValueError:
             print("Invalid input. Please choose from yes (y) or no (n).\n")
 else:
+    img_path = ''
     pathc = "n"
 
 
