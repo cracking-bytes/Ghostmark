@@ -57,10 +57,6 @@ python3 src/main.py
 | Image Hash Comparison  |  JPG, PNG             |                       |
 | Detecting Password Protection |   JPG, PNG     |                       |
 
-
-## Usage/Examples
-
-
 ---
 
 ## Tech Stack
