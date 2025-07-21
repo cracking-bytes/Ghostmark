@@ -20,13 +20,32 @@ def check_magic_number(file_path):
         else:
             return "Unknown"
 
+def check_extension_match(file_path, detected_type):
+    ext = os.path.splitext(file_path)[1].lower().replace('.', '')
+    ext_map = {
+        'jpg': 'JPEG',
+        'jpeg': 'JPEG',
+        'png': 'PNG',
+        'zip': 'ZIP',
+        'rar': 'RAR',
+        '7z': '7Z'
+    }
+    expected_type = ext_map.get(ext, 'Unknown')
+    if expected_type != detected_type:
+        print("Extension does not match actual file type.")
+        print(f" - File Extension used: {expected_type}")
+        print(f" - Actual file type: {detected_type}")
+    else:
+        print(f"File type identified as: {detected_type}")
+
 def try_open_image(file_path):
     try:
         with Image.open(file_path) as img:
             img.verify()
+        print("Image opened successfully [file not encrypted or corrupted]")
         return True
     except:
-        print("Image could not be opened. Might be encrypted or corrupted.")
+        print("Unable to open image [Might be encrypted or corrupted]")
         return False
 
 def check_zip_password(file_path):
@@ -36,15 +55,17 @@ def check_zip_password(file_path):
                 if file.flag_bits & 0x1:
                     print("ZIP file is password protected.")
                     return True
+        print("ZIP file is not password protected.")
         return False
     except:
-        print("ZIP file could not be opened.")
+        print("Unable to open ZIP file.")
         return False
 
 def check_7z_password(file_path):
     try:
         with py7zr.SevenZipFile(file_path, mode='r', password="test") as archive:
             archive.getnames()
+        print("7z file is not password protected.")
         return False
     except:
         print("7z file is password protected or unreadable.")
@@ -55,15 +76,38 @@ def check_metadata(file_path):
         result = subprocess.run(['./exiftool.exe', file_path], capture_output=True, text=True)
         metadata = result.stdout.strip()
         if not metadata:
+            print("No metadata found.")
             return
-        lower = metadata.lower()
-        if "password" in lower or "encrypted" in lower or "hidden" in lower:
-            print("Metadata contains suspicious fields:")
+
+        lines = metadata.splitlines()
+        useful_metadata = []
+
+        ignored_keywords = [
+            'dpi', 'resolution', 'software', 'colorspace', 'bits', 'compression',
+            'image width', 'image height', 'file type', 'exif version', 'megapixels',
+            'file size', 'mime type', 'encoding', 'samples', 'profile', 'gamma',
+            'interlace', 'color type', 'bit depth', 'filter', 'image size',
+            'directory', 'file name', 'exiftool version', 'permissions',
+            'modification date', 'access date', 'creation date'
+        ]
+
+        for line in lines:
+            lower_line = line.lower()
+            if any(keyword in lower_line for keyword in ignored_keywords):
+                continue
+            useful_metadata.append(line)
+
+        if useful_metadata:
+            print("Non-default metadata fields detected:")
             print("-" * 40)
-            print(metadata)
+            for line in useful_metadata:
+                print(line)
             print("-" * 40)
+        else:
+            print("No suspicious metadata fields found...")
+
     except:
-        pass
+        print("Could not read metadata using ExifTool.")
 
 def try_common_file_types(file_path):
     types = ['.txt', '.jpg', '.png', '.zip', '.7z']
@@ -72,7 +116,7 @@ def try_common_file_types(file_path):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
-                    print("File is a text file. Content:")
+                    print("Text file content:")
                     print("-" * 40)
                     print(text)
                     print("-" * 40)
@@ -88,25 +132,26 @@ def try_common_file_types(file_path):
         elif ext == '.7z':
             check_7z_password(file_path)
             return
+    print("Unknown or unsupported file type.")
 
 def analyze(file_path):
-    kind = check_magic_number(file_path)
-    if kind == "ZIP":
+    detected_type = check_magic_number(file_path)
+    check_extension_match(file_path, detected_type)
+
+    if detected_type == "ZIP":
         check_zip_password(file_path)
-    elif kind == "7Z":
+    elif detected_type == "7Z":
         check_7z_password(file_path)
-    elif kind in ["JPEG", "PNG"]:
-        if not try_open_image(file_path):
-            return
-        check_metadata(file_path)
-    elif kind == "RAR":
+    elif detected_type in ["JPEG", "PNG"]:
+        if try_open_image(file_path):
+            check_metadata(file_path)
+    elif detected_type == "RAR":
         print("RAR files are not supported.")
     else:
         try_common_file_types(file_path)
 
-if __name__ == "__main__":
-    path = input("Enter file path: ").strip()
-    if not os.path.exists(path):
+def main(img_path):
+    if not os.path.exists(img_path):
         print("File not found.")
     else:
-        analyze(path)
+        analyze(img_path)
