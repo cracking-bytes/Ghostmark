@@ -5,7 +5,7 @@ import msg_embed as me
 import text_extraction as te
 import steganography_detection as sd
 import image_hashing as ih
-# import password_protection_detection as ppd
+import password_protection_detection as ppd
 
 
 # image input
@@ -27,9 +27,9 @@ import image_hashing as ih
 #                 img_list = [path.strip() for path in img_path.split(',') if path.strip()]
 #                 return img_list
 #             else:
-#                 print("⚠️ Please Enter 1 or 2 only.")
+#                 print("Please Enter 1 or 2 only.")
 #         except ValueError:
-#             print("❌ Invalid input! Please enter a number (1 or 2).")
+#             print("Invalid input! Please enter a number (1 or 2).")
 
 # images = get_img_inp()
 # print("images: ", images)
@@ -40,7 +40,7 @@ import image_hashing as ih
 def feature_select():
     while True:
         try:
-            print('''\nPlease select what you want to do with the image/images:
+            print('''\nPlease select what you want to do with the image:
 1. Extract metadata
 2. Wipe metadata
 3. Embed text in image
@@ -56,20 +56,29 @@ def feature_select():
             f_list = [int(i.strip()) for i in f_inp.split(',')]
 
             
-            if all(1 <= i <= 7 for i in f_list):
+            if all(1 <= i <= 9 for i in f_list):
                 return f_list
                 break
             else:
-                print("❌ Please enter valid numbers between 1 and 7.\n")
+                print("Please enter valid numbers between 1 and 7.\n")
             
         except ValueError:
-            print("❌ Invalid input. Please enter numbers only, separated by commas.\n")
+            print("Invalid input. Please enter numbers only, separated by commas.\n")
+
+
 
 # working of the features
 
+# def ext(img_path):
+#     return
+#     ext = os.path.splitext(img_path)[1].lower()
+
+
 def work(i, img_path):
+
     if i == 1:
         print('''\n\n\n--- Metadata Extraction ---\n''')
+
         if pathc == "n":
             img_path = input("Enter the image path: ").strip()
         mp.main(img_path)
@@ -110,7 +119,7 @@ def work(i, img_path):
         print("\n\n\n--- Image Comparision ---\n")
         if pathc == "n":
             img_path = input("Enter the first image path: ")
-            img_path2 = input("Enter the second image path: ")
+            img_path2 = input("Enter the second image path: \n")
         else:
             img_path2 = input("Enter the second image path: ")
         i1 = ih.hashing(img_path)
@@ -118,14 +127,17 @@ def work(i, img_path):
         ih.compare(i1, i2)
 
     if i == 8:
+        print("\n\n\n--- Detecting Password Protection ---\n")
         if pathc == "n":
             img_path = input("Enter the image path: ")
+        ppd.main(img_path)
+
 
 
 
 features = feature_select()
 
-if len(features) > 1:
+if len(features) > 1 or 9 in features:
     while True:
         try:
             pathc = input("Do you want to use same img path for all selected features (y/n): ")
@@ -137,7 +149,7 @@ if len(features) > 1:
                 img_path = ''
                 break
             else:
-                print("Please choose from yes (y) or no (n).\n")
+                print(" !! Please choose from yes (y) or no (n).\n")
 
         except ValueError:
             print("Invalid input. Please choose from yes (y) or no (n).\n")

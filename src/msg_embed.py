@@ -11,7 +11,7 @@ def main(path):
     ascii_to_bin.append("1111111111111110") 
     binary_message = ''.join(ascii_to_bin)
 
-    print("Binary to embed:", binary_message)
+    # print("Binary to embed:", binary_message)
 
     img = Image.open(path).convert("RGB")
     pixels = img.load()
@@ -32,5 +32,8 @@ def main(path):
 
 
     imgsave = input(f"\nEnter the path with name of the image when saved (example: example_images/clean.jpg or leave empty): ")
+    if imgsave == "":
+        imgsave = "img_clean.jpg"
+    
     img.save(imgsave)
     print(f"\nMessage embedded and saved to {imgsave}")

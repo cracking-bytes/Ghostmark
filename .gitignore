@@ -1,2 +1,6 @@
 src/__pycache__/
 *.pyc
+
+example_images/
+src/test.pyc
+src/notes.txt

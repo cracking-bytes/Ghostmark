@@ -71,43 +71,43 @@ def check_7z_password(file_path):
         print("7z file is password protected or unreadable.")
         return True
 
-def check_metadata(file_path):
-    try:
-        result = subprocess.run(['./exiftool.exe', file_path], capture_output=True, text=True)
-        metadata = result.stdout.strip()
-        if not metadata:
-            print("No metadata found.")
-            return
+# def check_metadata(file_path):
+#     try:
+#         result = subprocess.run(['./exiftool.exe', file_path], capture_output=True, text=True)
+#         metadata = result.stdout.strip()
+#         if not metadata:
+#             print("No metadata found.")
+#             return
 
-        lines = metadata.splitlines()
-        useful_metadata = []
+#         lines = metadata.splitlines()
+#         useful_metadata = []
 
-        ignored_keywords = [
-            'dpi', 'resolution', 'software', 'colorspace', 'bits', 'compression',
-            'image width', 'image height', 'file type', 'exif version', 'megapixels',
-            'file size', 'mime type', 'encoding', 'samples', 'profile', 'gamma',
-            'interlace', 'color type', 'bit depth', 'filter', 'image size',
-            'directory', 'file name', 'exiftool version', 'permissions',
-            'modification date', 'access date', 'creation date'
-        ]
+#         ignored_keywords = [
+#             'dpi', 'resolution', 'software', 'colorspace', 'bits', 'compression',
+#             'image width', 'image height', 'file type', 'exif version', 'megapixels',
+#             'file size', 'mime type', 'encoding', 'samples', 'profile', 'gamma',
+#             'interlace', 'color type', 'bit depth', 'filter', 'image size',
+#             'directory', 'file name', 'exiftool version', 'permissions',
+#             'modification date', 'access date', 'creation date'
+#         ]
 
-        for line in lines:
-            lower_line = line.lower()
-            if any(keyword in lower_line for keyword in ignored_keywords):
-                continue
-            useful_metadata.append(line)
+#         for line in lines:
+#             lower_line = line.lower()
+#             if any(keyword in lower_line for keyword in ignored_keywords):
+#                 continue
+#             useful_metadata.append(line)
 
-        if useful_metadata:
-            print("Non-default metadata fields detected:")
-            print("-" * 40)
-            for line in useful_metadata:
-                print(line)
-            print("-" * 40)
-        else:
-            print("No suspicious metadata fields found...")
+#         if useful_metadata:
+#             print("Non-default metadata fields detected:")
+#             print("-" * 40)
+#             for line in useful_metadata:
+#                 print(line)
+#             print("-" * 40)
+#         else:
+#             print("No suspicious metadata fields found...")
 
-    except:
-        print("Could not read metadata using ExifTool.")
+#     except:
+#         print("Could not read metadata using ExifTool.")
 
 def try_common_file_types(file_path):
     types = ['.txt', '.jpg', '.png', '.zip', '.7z']
@@ -142,9 +142,9 @@ def analyze(file_path):
         check_zip_password(file_path)
     elif detected_type == "7Z":
         check_7z_password(file_path)
-    elif detected_type in ["JPEG", "PNG"]:
-        if try_open_image(file_path):
-            check_metadata(file_path)
+    # elif detected_type in ["JPEG", "PNG"]:
+    #     if try_open_image(file_path):
+    #         check_metadata(file_path)
     elif detected_type == "RAR":
         print("RAR files are not supported.")
     else:

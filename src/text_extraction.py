@@ -18,13 +18,13 @@ def main(path):
             bit_stream += str(lsb)
 
             if "1111111111111110" in bit_stream:
-                print("msg found!")
-                print(bit_stream)
+                print("Message found!")
+                # print(bit_stream)
                 bit_stream = bit_stream.split("1111111111111110")[0]
                 binary_msg = [bit_stream[i:i+8] for i in range(0, len(bit_stream),8)]
                 message = ''.join([chr(int(b, 2)) for b in binary_msg])
                 # print("Binary Chunks:", binary_msg)
-                print("Hidden Message:", message)
+                print("\nHidden Message:", message)
                 found = True
                 break
 
@@ -34,3 +34,5 @@ def main(path):
 
     if not found:
         print("No message found.")
+
+# main(input(": "))
