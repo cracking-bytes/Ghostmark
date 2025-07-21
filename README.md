@@ -1,19 +1,19 @@
 # Ghostmark
 
-**Ghostmark** is a command-line image forensics toolkit designed to help you analyze, verify, and sanitize digital images. It provides tools for extracting metadata, detecting steganography, extracting text, hashing images, scrubbing metadata, and detecting password protection. Ghostmark supports batch processing, generates detailed reports.
+**Ghostmark** is a command-line toolkit designed with almost all features that you require for image forensics. It can extract metadata, scrub metadata, embed or extract text from the images, detect for steganography, generate image hashes and compare them, detect for password protection.
 
 ---
 
 ## Features
 
 - Metadata Extraction
-- Steganography (LSB) Detector
-- Text Extraction
-- Image Hashing
 - Metadata Scrubber
-- Password Protection Detection
-- Batch Mode
-- HTML / TXT Report Generator
+- Embedding Text
+- Extracting Hidden Text
+- Steganography Detection
+- Generating Image Hash
+- Image Hash Comparision
+- Detecting Password Protection
 - CLI based
 
 ---
@@ -44,27 +44,41 @@ Run the program (CLI)
 python3 src/main.py
 ```
 
-Run the GUI (Optional)
+## Working
 
-```bash
-python3 src/gui.py
-```
+| Feature                | Supporting File Types | Saving File Type      |
+|------------------------|-----------------------|-----------------------|
+| Metadata Extraction    |  JPG                  |                       |
+| Metadata Scrubber      |  JPG                  |  JPG, PNG             |
+| Embedding Text         |  JPG, PNG             |  PNG                  |
+| Extracting Hidden Text |  PNG                  |                       |
+| Steganography Detection|  JPG, PNG             |                       |
+| Generating Image Hash  |  JPG, PNG             |                       |
+| Image Hash Comparison  |  JPG, PNG             |                       |
+| Detecting Password Protection |   JPG, PNG     |                       |
 
----
 
 ## Usage/Examples
-
 
 
 ---
 
 ## Tech Stack
 
-**Language:** Python 3
+**Language Used:**
+- Python 3
 
-**Libraries:**
-
-
+**Libraries Used:**
+- `pillow` 
+- `piexif`
+- `pprint`
+- `hashlib`
+- `imagehash`
+- `numpy`
+- `os`
+- `zipfile`
+- `py7zr`
+- `subprocess`
 
 **Dev Tools:**
 
@@ -79,7 +93,7 @@ python3 src/gui.py
 
 ---
 
-## Author
+## Authors
 
 Bhavika Nagdeo (Cracking Bytes)  
 - [GitHub](https://github.com/cracking-bytes)  
@@ -87,7 +101,13 @@ Bhavika Nagdeo (Cracking Bytes)
 - [Instagram](https://www.instagram.com/cracking.bytes/)  
 - [Medium](https://crackingbytes.medium.com/)
 
+Ranveer
+- [GitHub](https://github.com/Ranveerrrrr)
+- [Linkedin](https://www.linkedin.com/in/ranveer-kohli-16ab76346)
+- [Instagram](https://www.instagram.com/3ug_atsec)
+
 ---
+
 
 ## Feedback
 

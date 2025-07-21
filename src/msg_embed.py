@@ -31,9 +31,9 @@ def main(path):
             break
 
 
-    imgsave = input(f"\nEnter the path with name of the image when saved (example: example_images/clean.jpg or leave empty): ")
+    imgsave = input(f"\nEnter the path with name of the image when saved (example: example_images/embd.png or leave empty): ")
     if imgsave == "":
-        imgsave = "img_clean.jpg"
+        imgsave = "embd.png"
     
     img.save(imgsave)
     print(f"\nMessage embedded and saved to {imgsave}")
