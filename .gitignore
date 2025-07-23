@@ -4,3 +4,16 @@ src/__pycache__/
 example_images/
 src/test.pyc
 src/notes.txt
+
+__pycache__/
+*.py[cod]
+*.so
+
+.venv/
+
+build/
+dist/
+*.egg-info/
+
+.DS_Store
+*.swp

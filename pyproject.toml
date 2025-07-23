@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ghostmark"
+version = "1.0.0"
+description = "Offline CLI toolkit for image metadata, steganography, hidden data detection, and image hashing."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Bhavika Nagdeo", email = "bhavikanagdeo83@gmail.com" },
+  { name = "Ranveer Kohli", email = "bugatsec@gmail.com" }
+]
+
+keywords = ["image", "steganography", "metadata", "image-forensics", "hashing", "CLI"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent"
+]
+
+dependencies = [
+  "Pillow",
+  "piexif",
+  "imagehash",
+  "numpy",
+  "py7zr"
+]
+
+[project.scripts]
+ghostmark = "ghostmark.__main__:main"
+
+[project.urls]
+"Homepage" = "https://github.com/cracking-bytes/Ghostmark"
+"GitHub Repository" = "https://github.com/cracking-bytes/Ghostmark"
+
+[tool.setuptools.packages.find]
+where = ["src"]
