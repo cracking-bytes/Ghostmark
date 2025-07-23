@@ -2,6 +2,8 @@
 
 **Ghostmark** is a command-line toolkit designed with almost all features that you require for image forensics. It can extract metadata, scrub metadata, embed or extract text from the images, detect for steganography, generate image hashes and compare them, detect for password protection.
 
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
+
 ---
 
 ## Features
