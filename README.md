@@ -100,8 +100,8 @@ Bhavika Nagdeo (Cracking Bytes)
 
 Ranveer
 - [GitHub](https://github.com/Ranveerrrrr)
-- [Linkedin](https://www.linkedin.com/in/ranveer-kohli-16ab76346)
-- [Instagram](https://www.instagram.com/3ug_atsec)
+- [Linkedin](https://www.linkedin.com/in/ranveerkohli)
+- [Instagram](https://www.instagram.com/bugatsec)
 
 ---
 
