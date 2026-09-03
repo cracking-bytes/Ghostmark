@@ -98,10 +98,11 @@ Bhavika Nagdeo (Cracking Bytes)
 - [Instagram](https://www.instagram.com/cracking.bytes/)  
 - [Medium](https://crackingbytes.medium.com/)
 
-Ranveer
-- [GitHub](https://github.com/Ranveerrrrr)
+Ranveer Kohli (Bugatsec)
+- [GitHub](https://github.com/Bugatsec)
 - [Linkedin](https://www.linkedin.com/in/ranveerkohli)
 - [Instagram](https://www.instagram.com/bugatsec)
+- [Medium](https://bugatsec.medium.com/)
 
 ---
 
